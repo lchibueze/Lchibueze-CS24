@@ -1,0 +1,6 @@
+1  (HEAD -> master, origin/master, welcome-code)
+b32ef8bf61c43d55df872f63fcc12c6c0b3a6581 3d781608932f2f8f04c8aaeaa012dfadbd15e29d  (upstream/master, upstream/HEAD, origin/welcome-text, zimmermann, welcome-text, shi, alice)
+3d781608932f2f8f04c8aaeaa012dfadbd15e29d ffaee8250ac26be4cc8b5b8e13ccb3193870632d 
+ffaee8250ac26be4cc8b5b8e13ccb3193870632d 3aa0e605ee5db5633ca2b70406946bbd371e76f9 
+3aa0e605ee5db5633ca2b70406946bbd371e76f9 0aac5d3aec53f89a503014a1557f98f5321597e2 
+0aac5d3aec53f89a503014a1557f98f5321597e2

@@ -1,0 +1,4 @@
+origin	https://github.com/lchibueze/Lchibueze-CS24.git (fetch)
+origin	https://github.com/lchibueze/Lchibueze-CS24.git (push)
+upstream	https://github.com/ucsb-cs24/m20 (fetch)
+upstream	https://github.com/ucsb-cs24/m20 (push)
