@@ -1,9 +1,10 @@
 #ifndef SKINNYLIST_H
 #define SKINNYLIST_H
 
+#include "Sequence.h"
 #include <string>
 
-// This class represents a single node in the list.
+// This class represents a node a singly linked list.
 // It's simple enough that we could have made it a struct
 // with public member variables, but we didn't.
 class SkinnyNode {
@@ -29,10 +30,10 @@ public:
   void setNext(SkinnyNode* next);
 };
 
-// This class represents an entire singly linked list.
+// This class implements a Sequence as a singly linked list.
 // It keeps track of its first node, and also a count of
 // items for easy access.
-class SkinnyList {
+class SkinnyList: public Sequence {
   // Private member variables
   SkinnyNode* mHead;
   int         mCount;
@@ -43,6 +44,8 @@ public:
 
   // Destructor
   ~SkinnyList();
+
+// Implement the functions that are required for a Sequence:
 
   // How many items are in this list?
   int count() const;
@@ -58,6 +61,10 @@ public:
   // Remove the item at the given index.
   // Throws std::out_of_range if index is invalid.
   void remove(int index);
+
+// Implement any extra member functions you need...
+
+  // But we don't need anything else.
 };
 
 #endif

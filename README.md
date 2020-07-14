@@ -22,3 +22,4 @@ _All assignments are individual assignents._
 
 - [Welcome](welcome): Git some practice.
 - [Chunky List](chunkylist): Fun with pointers.
+- [Calculator](calculator): Putting stacks to work.

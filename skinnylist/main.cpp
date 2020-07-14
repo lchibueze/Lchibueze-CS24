@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
 
 // This prints an array of strings, followed by a newline.
 void print_array(const std::string* items, int count) {
