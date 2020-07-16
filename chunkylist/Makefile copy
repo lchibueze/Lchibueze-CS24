@@ -1,0 +1,14 @@
+DLL.out: main.o ChunkyList.o MyChunkyList.o MyChunkyNode.o
+	g++ -std=c++17 -Wall -Wextra -Werror -o DLL.out main.o ChunkyList.o MyChunkyList.o  MyChunkyNode.o
+
+main.o: main.cpp MyChunkyList.h Chunkynode.h
+	g++ -std=c++17 -Wall -Wextra -Werror -c -o main.o main.cpp
+
+SkinnyList.o: SkinnyList.cpp SkinnyList.h Sequence.h
+	g++ -std=c++17 -Wall -Wextra -Werror -c -o SkinnyList.o SkinnyList.cpp
+
+SkinnyNode.o: SkinnyNode.cpp SkinnyList.h Sequence.h
+	g++ -std=c++17 -Wall -Wextra -Werror -c -o SkinnyNode.o SkinnyNode.cpp
+
+clean:
+	rm -f DLL.out main.o SkinnyList.o SkinnyNode.o
