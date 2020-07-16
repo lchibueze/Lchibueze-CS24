@@ -5,6 +5,7 @@
 
 class MyStack: public Stack {
   // TODO: Member Variables
+    int count;
 public:
   // TODO: Constructor & Destructor
 
