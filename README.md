@@ -13,6 +13,7 @@ _09:00 to 09:50 on Tuesdays, Wednesdays, and Thursdays_
 
 - [Intro to Git](notes/Intro%20to%20Git.md): Tuesday, June 23rd
 - [The Stack and the Heap](notes/The%20Stack%20and%20the%20Heap.md): Thursday, June 25th
+- [Structs and Classes](notes/Structs%20and%20Classes.md): Thursday, July 2nd
 
 
 ## Assignments
@@ -20,3 +21,5 @@ _09:00 to 09:50 on Tuesdays, Wednesdays, and Thursdays_
 _All assignments are individual assignents._
 
 - [Welcome](welcome): Git some practice.
+- [Chunky List](chunkylist): Fun with pointers.
+- [Calculator](calculator): Putting stacks to work.

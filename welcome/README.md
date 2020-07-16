@@ -1,6 +1,6 @@
 # Welcome
 
-_Due Monday, June 29th, before midnight Pacific Time._
+_Due Monday, July 6th, before midnight Pacific Time._
 
 Welcome to CS 24!  This assignment will make sure you have  Git set up correctly
 and are ready to submit your programming projects to Gradescope.
