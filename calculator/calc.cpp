@@ -18,7 +18,11 @@ void calculator(std::string equation){
     while (stream>>token){
         double num;
         std::string temp = "NULL";
-        try {
+        if ((token[0]=='+') && ((token[1]=='0')||(token[1]=='1')||(token[1]=='2')||(token[1]=='3')||(token[1]=='4')||(token[1]=='5')||(token[1]=='6')||(token[1]=='7')||(token[1]=='8')||(token[1]=='9'))){
+            token.erase(0,1);
+        }
+            
+            try {
             num = std::stod(token);
             temp =std::to_string(num);
             temp = temp.substr(0,token.length());
