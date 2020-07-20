@@ -140,11 +140,12 @@ void calculator(std::string equation){
         
         
     }
+    
+    if ((token=="")){
+        std::cout<<"No expression." <<std::endl;
+    }
     if ((token!= "") && (Stack.count !=1)) {
         std::cout<<"Too many operands." <<std::endl;
-    }
-    if ((token=="")){
-            std::cout<<"No expression." <<std::endl;
         return;
     }
     
