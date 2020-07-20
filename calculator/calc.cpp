@@ -8,7 +8,7 @@
 
 // TODO: Calculator helper fuctions, if necessary.
 
-double calculator(std::string equation){
+void calculator(std::string equation){
     std::stringstream stream(equation);
     std::string token;
     MyStack Stack;
@@ -29,7 +29,7 @@ double calculator(std::string equation){
             }
             else {
                 std::cout<<"Unknown token. " <<std::endl;
-                std::exit(0);
+                return;
             }
             
         }
@@ -53,7 +53,7 @@ double calculator(std::string equation){
                         
                         else {
                             std::cout<< "Not enough operands. " << std::endl;
-                            std::exit(0);
+                            return;
                         }
                     }
                     else {
@@ -69,7 +69,7 @@ double calculator(std::string equation){
                             
                         else {
                             std::cout<< "Not enough operands. " << std::endl;
-                            std::exit(0);
+                            return;
                         }
                         
                     }
@@ -90,7 +90,7 @@ double calculator(std::string equation){
                     if (token== "/"){
                         if (num2==0){
                             std::cout<<"Division by zero." << std::endl;
-                            std::exit(0);
+                            return;
                         }
                         else {
                             result = num1 / num2;
@@ -102,7 +102,7 @@ double calculator(std::string equation){
                         
                         if (num2==0) {
                             std::cout<<"Division by zero." <<std::endl;
-                            std::exit (0);
+                            return;
                         }
                         else {
                             result = std:: fmod(num1,num2);
@@ -122,7 +122,7 @@ double calculator(std::string equation){
                 
                 else {
                     std::cout <<"Unknown token. " <<std::endl;
-                    std::exit(0);
+                    return;
                 }
                 
                 
@@ -143,10 +143,11 @@ double calculator(std::string equation){
     }
     if (Stack.count !=1) {
         std::cout<<"Too many operands. " <<std::endl;
-        std::exit(0);
+        return;
     }
     
-    return Stack.top();
+    std::cout<<"= " << Stack.top() <<std::endl;
+    return;
     
 }
 
@@ -157,17 +158,20 @@ double calculator(std::string equation){
 int main() {
     // TODO: Implement a calculator!
     
-    double result;
-    std::string equation;
-    getline (std::cin,equation);
+    while (true){
+
+        std::string equation;
+        getline (std::cin,equation);
+        
+        if (equation.length()==0) {
+            std::cout<<"No Expression." << std::endl;
+        
+        }
+        
+        calculator(equation);
+        
     
-    if (equation.length()==0) {
-        std::cout<<"No Expression." << std::endl;
-        std::exit(0);
+        
     }
-    
-    result = calculator(equation);
-    
-    std::cout<<"= " << result <<std::endl;
-    
+    return 0;
 }
