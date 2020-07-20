@@ -17,10 +17,10 @@ void calculator(std::string equation){
     
     while (stream>>token){
         //std::cout<<"\""<<token<<"\""<<std::endl;
-        long long int num;
+        double num;
         std::string temp = "NULL";
         try {
-            num = std::stoll(token);
+            num = std::stod(token);
             temp =std::to_string(num);
             temp = temp.substr(0,token.length());
             if (token.compare(temp)==0){
@@ -37,7 +37,7 @@ void calculator(std::string equation){
             if (temp == "NULL"){
                 
                 if ((token == "+" ||token== "-"||token== "*" || token== "/" ||token == "%" ||token=="~"||token =="^")) {
-                    long long int result,num1,num2;
+                    double result,num1,num2;
                     int count = 0;
                     
                     
