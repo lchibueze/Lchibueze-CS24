@@ -158,17 +158,20 @@ void calculator(std::string equation){
 int main() {
     // TODO: Implement a calculator!
     
-    while (true){
-
-        std::string equation;
-        getline (std::cin,equation);
+    std::string equation;
+    
+    while (getline (std::cin,equation)){
+        
         
         if (equation.length()==0) {
             std::cout<<"No Expression." << std::endl;
+        }
+        else{
         
+            calculator(equation);
         }
         
-        calculator(equation);
+        
         
     
         
