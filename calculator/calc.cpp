@@ -16,7 +16,6 @@ void calculator(std::string equation){
     
     
     while (stream>>token){
-        //std::cout<<"\""<<token<<"\""<<std::endl;
         double num;
         std::string temp = "NULL";
         try {
@@ -141,8 +140,11 @@ void calculator(std::string equation){
         
         
     }
-    if (Stack.count !=1) {
+    if ((token!= "") && (Stack.count !=1)) {
         std::cout<<"Too many operands." <<std::endl;
+    }
+    if ((token=="")){
+            std::cout<<"No expression." <<std::endl;
         return;
     }
     
@@ -163,7 +165,7 @@ int main() {
     while (getline (std::cin,equation)){
         
         
-        if (equation.length()==0) {
+        if (equation.length()==0 ||equation == "") {
             std::cout<<"No expression." << std::endl;
         }
         else{
