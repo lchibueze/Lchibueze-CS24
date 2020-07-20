@@ -28,7 +28,7 @@ void calculator(std::string equation){
                 Stack.push(num);
             }
             else {
-                std::cout<<"Unknown token. " <<std::endl;
+                std::cout<<"Unknown token." <<std::endl;
                 return;
             }
             
@@ -52,7 +52,7 @@ void calculator(std::string equation){
                         }
                         
                         else {
-                            std::cout<< "Not enough operands. " << std::endl;
+                            std::cout<< "Not enough operands." << std::endl;
                             return;
                         }
                     }
@@ -68,7 +68,7 @@ void calculator(std::string equation){
                         }
                             
                         else {
-                            std::cout<< "Not enough operands. " << std::endl;
+                            std::cout<< "Not enough operands." << std::endl;
                             return;
                         }
                         
@@ -121,7 +121,7 @@ void calculator(std::string equation){
                 
                 
                 else {
-                    std::cout <<"Unknown token. " <<std::endl;
+                    std::cout <<"Unknown token." <<std::endl;
                     return;
                 }
                 
@@ -142,7 +142,7 @@ void calculator(std::string equation){
         
     }
     if (Stack.count !=1) {
-        std::cout<<"Too many operands. " <<std::endl;
+        std::cout<<"Too many operands." <<std::endl;
         return;
     }
     
