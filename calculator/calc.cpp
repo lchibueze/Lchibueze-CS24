@@ -23,11 +23,10 @@ void calculator(std::string equation){
         }
             
             try {
-            num = std::stod(token);
-            temp =std::to_string(num);
-            temp = temp.substr(0,token.length());
-            if (token.compare(temp)==0){
-                //std::cout<< num <<std::endl;
+                std::size_t read=0;
+                num = std::stod(token, &read);
+            
+                if (read == token.length()){
                 Stack.push(num);
             }
             else {
