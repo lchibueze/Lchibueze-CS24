@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
               continue;
           }
               
-        std::cout<<"=>"<<ast->prefix() <<std::endl;
+        std::cout<<"=> "<<ast->prefix() <<std::endl;
       }
       if (strcmp(argv[1], "prefix")==0 && strcmp(argv[2], "infix")==0)
            {
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
                    continue;
                }
                
-               std::cout<<"=>"<<ast->infix() <<std::endl;
+               std::cout<<"=> "<<ast->infix() <<std::endl;
            }
       if (strcmp(argv[1], "prefix")==0 && strcmp(argv[2], "postfix")==0)
            {
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
                    continue;
                }
                
-               std::cout<<"=>"<<ast->postfix() <<std::endl;
+               std::cout<<"=> "<<ast->postfix() <<std::endl;
            }
       if (strcmp(argv[1], "postfix")==0 && strcmp(argv[2], "prefix")==0)
            {
@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
             
                if (ast==NULL)
                 continue;
-               std::cout<<"=>"<<ast->prefix() <<std::endl;
+               std::cout<<"=> "<<ast->prefix() <<std::endl;
            }
       if (strcmp(argv[1], "postfix")==0 && strcmp(argv[2], "infix")==0)
            {
@@ -74,14 +74,14 @@ int main(int argc, char** argv) {
                
                if (ast==NULL)
                    continue;
-               std::cout<<"=>"<<ast->infix() <<std::endl;
+               std::cout<<"=> "<<ast->infix() <<std::endl;
            }
       if (strcmp(argv[1], "postfix")==0 && strcmp(argv[2], "postfix")==0)
            {
                AST* ast= AST::parse_postfix (tokens);
                if (ast==NULL)
                    continue;
-               std::cout<<"=>"<<ast->postfix() <<std::endl;
+               std::cout<<"=> "<<ast->postfix() <<std::endl;
            }
     
   }

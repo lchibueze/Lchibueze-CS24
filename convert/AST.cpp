@@ -47,7 +47,7 @@ AST* AST::parse_prefix(std::istream& tokens) {
             return new Number (token);
         }
         else{
-            std::cout<<"Invalid Token: "<<token<<std::endl;
+            std::cout<<"Invalid token: "<<token<<std::endl;
             return NULL;
         }
     
@@ -93,7 +93,7 @@ AST* AST::parse_postfix(std::istream& tokens) {
                 Stack.push(new Number(token));
             }
             else{
-                std::cout<<"Invalid Token: "<<token<<std::endl;
+                std::cout<<"Invalid token: "<<token<<std::endl;
                 return NULL;
                 }
                 
