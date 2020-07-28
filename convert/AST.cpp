@@ -22,7 +22,7 @@ bool is_operator(const std::string& token){
 bool is_number(const std::string& token){
 if(token[0] == '-' || token[0] == '+'){
   for (std::string::size_type i=1; i<token.size(); i++){
-      if(!isdigit(token[i]))
+      if(!isdigit(token[i]) || token[i] != '.')
           return false;
 
   }
@@ -30,7 +30,7 @@ if(token[0] == '-' || token[0] == '+'){
 }
 
 for (std::string::size_type i=0; i<token.size(); i++){
-    if(!isdigit(token[i]))
+    if(!isdigit(token[i]) || token[i] != '.')
         return false;
 
 }
