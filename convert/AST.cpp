@@ -20,22 +20,39 @@ bool is_operator(const std::string& token){
 
 
 bool is_number(const std::string& token){
-if(token[0] == '-' || token[0] == '+'){
-  for (std::string::size_type i=1; i<token.size(); i++){
-      if(!isdigit(token[i]) && token[i] != '.')
-          return false;
+  int counter = 0;
+    if(token[0] == '-' || token[0] == '+'){
+      for (std::string::size_type i=1; i<token.size(); i++){
+        if(token[i] == '.'){
+          counter++;
+        }
+          if(!isdigit(token[i]) && token[i] != '.'){
+            return false;
+          }
 
-  }
-  return true;
-}
+      }
 
-for (std::string::size_type i=0; i<token.size(); i++){
-    if(!isdigit(token[i]) && token[i] != '.')
+      if(counter > 1){
         return false;
+      }
+      return true;
+    }
 
-}
-return true;
-    
+    for (std::string::size_type i=0; i<token.size(); i++){
+      if(token[i] == '.'){
+        counter++;
+      }
+        if(!isdigit(token[i]) && token[i] != '.'){
+          return false;
+        }
+
+    }
+    if(counter > 1){
+      return false;
+    }
+    return true;
+
+
 };
 AST* AST::parse_prefix(std::istream& tokens) {
     std::string token;
