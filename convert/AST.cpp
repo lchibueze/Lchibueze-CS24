@@ -48,7 +48,7 @@ AST* AST::parse_prefix(std::istream& tokens) {
         }
         else{
             std::cout<<"Invalid Token: "<<token<<std::endl;
-            exit(0);
+            return NULL;
         }
     
     
@@ -65,7 +65,7 @@ AST* AST::parse_postfix(std::istream& tokens) {
             if (token == "~"){
                 if (Stack.size()<1){
                     std::cout<<"Not enough operands."<<std::endl;
-                    exit(0);
+                    return NULL;
                 }
                 AST* rdn = Stack.top();
                 Stack.pop();
@@ -77,7 +77,7 @@ AST* AST::parse_postfix(std::istream& tokens) {
             if (is_operator(token)){
                 if (Stack.size()<2){
                     std::cout<<"Not enough operands."<<std::endl;
-                    exit(0);
+                    return NULL;
                 }
                 AST* rdn = Stack.top();
                 Stack.pop();
@@ -94,13 +94,13 @@ AST* AST::parse_postfix(std::istream& tokens) {
             }
             else{
                 std::cout<<"Invalid Token: "<<token<<std::endl;
-                exit(0);
+                return NULL;
                 }
                 
         }
     if (Stack.size()!=1){
         std::cout<<"Too many operands."<<std::endl;
-        exit(0);
+        return NULL;
     }
     
         return Stack.top();

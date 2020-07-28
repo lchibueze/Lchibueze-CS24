@@ -10,8 +10,8 @@ int main(int argc, char** argv) {
   // Check your command line arguments...
     if ((argc!=3)|| (strcmp(argv[1],"prefix")!=0 && strcmp(argv[1],"postfix")!=0)|| (strcmp(argv[2],"prefix")!=0 && strcmp(argv[2],"infix")!=0 && strcmp(argv[2],"postfix")!=0))
     {
-        std::cout<<"USAGE: convert [input-format] [output-format]"<< std::endl <<"  Valid input formats: prefix, postfix" <<std::endl <<
-        "  Valid output formats: prefix, infix, postfix" <<std::endl;
+        std::cout<<"USAGE: convert [input-format] [output-format]"<< std::endl <<"  Valid input formats:   prefix, postfix" <<std::endl <<
+        "  Valid output formats:  prefix, infix, postfix" <<std::endl;
         return 0;
     }
         
@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
           std::string temp = ast->prefix();
           if (line.length()!=temp.length()){
               std::cout<<"Too many operands."<<std::endl;
-              exit(0);
+              continue;
           }
               
         std::cout<<"=>"<<ast->prefix() <<std::endl;
@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
                std::string temp = ast->prefix();
                if (line.length()!=temp.length()){
                    std::cout<<"Too many operands."<<std::endl;
-                   exit(0);
+                   continue;
                }
                
                std::cout<<"=>"<<ast->infix() <<std::endl;
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
                std::string temp = ast->prefix();
                if (line.length()!=temp.length()){
                    std::cout<<"Too many operands."<<std::endl;
-                   exit(0);
+                   continue;
                }
                
                std::cout<<"=>"<<ast->postfix() <<std::endl;
