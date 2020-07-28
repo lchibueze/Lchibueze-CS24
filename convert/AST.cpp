@@ -20,18 +20,26 @@ bool is_operator(const std::string& token){
 
 
 bool is_number(const std::string& token){
-    for (std::string::size_type i=0; i<token.size(); i++){
-        if(!isdigit(token[i]))
-            return false;
-        
-    }
-    return true;
+if(token[0] == '-' || token[0] == '+'){
+  for (std::string::size_type i=1; i<token.size(); i++){
+      if(!isdigit(token[i]))
+          return false;
+
+  }
+  return true;
+}
+
+for (std::string::size_type i=0; i<token.size(); i++){
+    if(!isdigit(token[i]))
+        return false;
+
+}
+return true;
     
 };
 AST* AST::parse_prefix(std::istream& tokens) {
     std::string token;
     if (tokens>>token) {
-        std::cout<<token << std::endl;
         if (token=="~") {
             AST* rdn = AST::parse_prefix (tokens);
             return (new Operator ("~",nullptr,rdn));

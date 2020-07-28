@@ -47,8 +47,15 @@ std::string Operator::infix()  const {
         std::cout<<"Not enough operands."<<std::endl;
         exit(0);
     }
-    return
-        mLDN->infix() + std::string (" ") + mToken + std::string(" ") + mRDN->infix();
+  if (mLDN->precedence() <= precedence()){
+         return std::string("(")+mLDN->infix() + std::string (") ") + mToken + std::string(" ") + mRDN->infix();
+     }
+     else if(mRDN->precedence() <= precedence()){
+         return mLDN->infix() + std::string (" ") + mToken + std::string(" (") + mRDN->infix() + std::string(")");
+     }
+     else{
+         return mLDN->infix() + std::string (" ") + mToken + std::string(" ") + mRDN->infix();
+     }
     }
 std::string Operator::postfix() const {
     if (mToken=="~"){
