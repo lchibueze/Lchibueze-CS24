@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
 
   std::string line;
   while(std::getline(std::cin, line)) {
-      std::cout<<line;
+     // std::cout<<line;
     std::istringstream tokens(line);
 
     // Convert the expression...
