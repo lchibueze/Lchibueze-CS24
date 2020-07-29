@@ -24,3 +24,4 @@ _All assignments are individual assignents._
 - [Chunky List](chunkylist): Fun with pointers.
 - [Calculator](calculator): Putting stacks to work.
 - [Convert](convert): Trees and recursion.
+- [Gene Pool](genepool): Sets, maps, and family trees.
