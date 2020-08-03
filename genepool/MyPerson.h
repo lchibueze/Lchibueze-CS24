@@ -5,10 +5,19 @@
 
 class MyPerson: public Person {
   // Member Variables
+    std::string myname;
+    Gender mygender;
+    MyPerson* mymother;
+    MyPerson* myfather;
+    std::set<MyPerson*> mychildren;
 
 public:
   // Constructor
+    MyPerson (std::string& name, Gender gender, MyPerson* mother, MyPerson* father);
   // Destructor?
+    ~MyPerson();
+    
+    void addchild(MyPerson* child);
 
   // Required Functions
   const std::string& name()   const;

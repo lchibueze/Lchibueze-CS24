@@ -7,10 +7,14 @@
 
 class MyGenePool: public GenePool {
   // Member Variables
+    //std::map<std::string, Person*> MyMap;
+    MyPerson* graphptr;
 
 public:
   // Constructor
+    MyGenePool(istream& stream);
   // Destructor
+    ~MyGenePool();
 
   // Required Function
   MyPerson* find(const std::string& name) const;
