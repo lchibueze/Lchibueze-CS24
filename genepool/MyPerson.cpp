@@ -441,3 +441,5 @@ std::set<Person*> MyPerson::descendants() {
     return temp;
     
 }
+
+MyPerson::~MyPerson(){};

@@ -14,7 +14,7 @@ public:
   // Constructor
     MyGenePool(std::istream& stream);
   // Destructor
-  //  ~MyGenePool();
+    ~MyGenePool();
 
   // Required Function
   MyPerson* find(const std::string& name) const;

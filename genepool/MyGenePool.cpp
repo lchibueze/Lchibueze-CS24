@@ -70,4 +70,19 @@ MyPerson* MyGenePool::find(const std::string& name) const{
     return temp->second;
 }
 
+MyGenePool::~MyGenePool() {
+    /*std::map<std::string, Person*> ::iterator it;
+    //for (auto const& [key,val] : MyMap) {
+      //  delete val;
+    //}
+    for (it = MyMap.begin(); it ! = MyMap.end(); ++it) {
+        delete it->second;
+    }*/
+    for (const auto & temp: MyMap){
+        delete temp.second;
+    }
+        MyMap.erase(MyMap.begin(),MyMap.end());
+    }
+
+
 

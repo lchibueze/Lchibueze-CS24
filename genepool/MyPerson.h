@@ -15,7 +15,7 @@ public:
   // Constructor
     MyPerson (std::string& name, Gender gender, MyPerson* mother, MyPerson* father);
   // Destructor?
-  //  ~MyPerson();
+    ~MyPerson();
     
     void addchild(MyPerson* child);
 
