@@ -129,7 +129,7 @@ to support are explained below.
 - Your **siblings** are people who share a parent with you, but are not you.
   - Your **maternal** siblings have the same mother as you.
   - Your **paternal** siblings have the same father as you.
-  - Your **full** siblings have the mother and father as you.
+  - Your **full** siblings have the same mother and father as you.
   - Your **half** siblings share only one parent with you.
 - Your **brothers** are your male siblings.
 - Your **sisters** are your female siblings.
@@ -176,9 +176,13 @@ Two people  with completely unknown parents  should not be considered  siblings.
 People need  at least one  known parent in common  before they should be treated
 as siblings.
 
+People who have an unknown father have no paternal siblings. The same applies to
+maternal siblings  when the mother is unknown.  You can only have  a maternal or
+paternal relationship through a known parent.
+
 Siblings who share one known parent and have the other parent unknown  should be
 considered full siblings. For example, if Alice and Bob are both the children of
-Eve and an unknown father, they should be treated as full siblings.
+Eve and an unknown father,  they should be treated as full siblings.
 
 People can show up in multiple relationships. If Alice and Bob from the previous
 paragraph  had a child named Carol,  Alice would be both  Carol's mother and her

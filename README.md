@@ -25,3 +25,10 @@ _All assignments are individual assignents._
 - [Calculator](calculator): Putting stacks to work.
 - [Convert](convert): Trees and recursion.
 - [Gene Pool](genepool): Sets, maps, and family trees.
+
+
+## Challenge Labs
+
+_You can work on challenge labs in pairs if you choose to._
+
+- [Noodle Shop](noodleshop): Making noodles (and money).
