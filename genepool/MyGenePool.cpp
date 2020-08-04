@@ -1,6 +1,7 @@
 #include "MyGenePool.h"
 #include "MyPerson.h"
 #include <sstream>
+#include <map>
 
 // This is here to avoid having yet another object file:
 GenePool* GenePool::create(std::istream& stream) {
@@ -11,8 +12,8 @@ GenePool* GenePool::create(std::istream& stream) {
 
 // MyGenePool Member Functions
 
-MyGenePool::MyGenePool(istream& stream){
-    string line,name,gender,mother,father;
+MyGenePool::MyGenePool(std::istream& stream){
+    std::string line,name,gender,mother,father;
     while (getline(stream,line)){
         if (line.length() ==0){
             continue;
@@ -48,7 +49,7 @@ MyGenePool::MyGenePool(istream& stream){
         else
             fatherptr=find(father);
         
-        MyPerson* temp = new MyPerson (name,my_gender,mother,father);
+        MyPerson* temp = new MyPerson(name,my_gender,motherptr,fatherptr);
         
         if (motherptr != NULL)
             motherptr->addchild (temp);
@@ -56,12 +57,16 @@ MyGenePool::MyGenePool(istream& stream){
         if (fatherptr !=NULL)
             fatherptr->addchild (temp);
         
-        
+        MyMap.insert(std::pair<std::string, MyPerson*> (name, temp));
     }
 }
 
 MyPerson* MyGenePool::find(const std::string& name) const{
-    
+    auto temp = MyMap.find(name);
+    if (temp==MyMap.end()){
+        return NULL;
+    }
+    return temp->second;
 }
 
 

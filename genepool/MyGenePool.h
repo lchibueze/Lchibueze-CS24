@@ -7,12 +7,12 @@
 
 class MyGenePool: public GenePool {
   // Member Variables
-    //std::map<std::string, Person*> MyMap;
-    MyPerson* graphptr;
+    std::map<std::string, MyPerson*> MyMap;
+   // MyPerson* graphptr;
 
 public:
   // Constructor
-    MyGenePool(istream& stream);
+    MyGenePool(std::istream& stream);
   // Destructor
     ~MyGenePool();
 
