@@ -7,7 +7,7 @@
 
 class MyGenePool: public GenePool {
   // Member Variables
-    std::map<std::string, MyPerson*> MyMap;
+    std::map<std::string, Person*> MyMap;
    // MyPerson* graphptr;
 
 public:
@@ -17,7 +17,7 @@ public:
     ~MyGenePool();
 
   // Required Function
-  MyPerson* find(const std::string& name) const;
+  Person* find(const std::string& name) const;
 
   // Other Member Functions
 };

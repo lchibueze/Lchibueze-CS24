@@ -7,23 +7,23 @@ class MyPerson: public Person {
   // Member Variables
     std::string myname;
     Gender mygender;
-    MyPerson* mymother;
-    MyPerson* myfather;
-    std::set<MyPerson*> mychildren;
+    Person* mymother;
+    Person* myfather;
+    std::set<Person*> mychildren;
 
 public:
   // Constructor
-    MyPerson (std::string& name, Gender gender, MyPerson* mother, MyPerson* father);
+    MyPerson (std::string& name, Gender gender, Person* mother, Person* father);
   // Destructor?
     ~MyPerson();
     
-    void addchild(MyPerson* child);
+    void addchild(Person* child);
 
   // Required Functions
   const std::string& name()   const;
   Gender             gender() const;
-  MyPerson*          mother();
-  MyPerson*          father();
+  Person*          mother();
+  Person*          father();
 
   // Required Relationship Functions
   std::set<Person*> ancestors(PMod pmod = PMod::ANY);
