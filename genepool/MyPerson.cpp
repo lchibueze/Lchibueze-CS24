@@ -4,7 +4,7 @@
 #include <algorithm>
 // MyPerson Member Functions
 
-MyPerson::MyPerson(std::string& name, Gender gender, Person* mother, Person* father) {
+MyPerson::MyPerson(std::string& name, Gender gender, MyPerson* mother, MyPerson* father) {
     
     myname=name;
     mygender=gender;
@@ -13,7 +13,7 @@ MyPerson::MyPerson(std::string& name, Gender gender, Person* mother, Person* fat
 
 }
 
-void MyPerson::addchild(Person* child){
+void MyPerson::addchild(MyPerson* child){
     mychildren.insert(child);
 }
 
@@ -126,7 +126,12 @@ std::set<Person*> MyPerson::daughters() {
 }
 
 std::set<Person*> MyPerson::children() {
-    return mychildren;
+    std::set<Person*> temp;
+    for (auto i = mychildren.begin(); i != mychildren.end(); ++i){
+        temp.insert(*i);
+        
+    }
+    return temp;
     
 }
 
@@ -134,7 +139,8 @@ std::set<Person*> MyPerson::grandsons() {
     std::set<Person*> temp;
     for (auto it = mychildren.begin(); it != mychildren.end(); ++it) {
         if ((*it) != NULL){
-            temp.insert((*it)->sons());
+            std::set<Person*> son_set = (*it)->sons();
+            temp.insert(son_set.begin(), son_set.end());
         }
     }
     return temp;
@@ -145,7 +151,8 @@ std::set<Person*> MyPerson::granddaughters() {
     std::set<Person*> temp;
     for (auto it = mychildren.begin(); it != mychildren.end(); ++it) {
         if ((*it) != NULL){
-            temp.insert((*it)->daughters());
+            std::set<Person*> daughter_set = (*it)->daughters();
+            temp.insert(daughter_set.begin(), daughter_set.end());
         }
     }
     return temp;
@@ -156,7 +163,8 @@ std::set<Person*> MyPerson::grandchildren() {
     std::set<Person*> temp;
     for (auto it = mychildren.begin(); it != mychildren.end(); ++it) {
         if ((*it) != NULL){
-        temp.insert((*it)->children());
+        std::set<Person*> children_set = (*it)->children();
+        temp.insert(children_set.begin(), children_set.end());;
         }
     }
     return temp;
@@ -190,45 +198,51 @@ std::set<Person*> MyPerson::sisters(PMod pmod  , SMod smod  ) {
 }
 
 std::set<Person*> MyPerson::siblings(PMod pmod  , SMod smod  ) {
-    std::set<Person*>child_mother = mymother->children();
-    std::set<Person*>child_father = myfather->children();
+    std::set<Person*>child_mother;
+    std::set<Person*>child_father;
+    
+    if (mymother!=NULL){
+        child_mother = mymother->children();
+    }
+    if (myfather!=NULL){
+        child_father = myfather->children();
+    }
     std::set<Person*>any_sibling;
     
     
     switch (smod) {
-        case SMod::FULL:
-            if ((child_mother!= NULL) && (child_father!= NULL))
+        case SMod::FULL: {
+            if ((mymother!= NULL) && (myfather== NULL))
                 return child_mother;
-            if ((child_father!= NULL) && (child_mother!= NULL))
+            if ((myfather!= NULL) && (mymother== NULL))
                 return child_father;
             
             std::set<Person*> intersection = (child_mother & child_father);
             return intersection;
             break;
+        }
         case SMod::HALF:
             switch(pmod) {
-                 
-                //std::set<Person*> all;
-                    
-                case PMod::MATERNAL:
+                
+                case PMod::MATERNAL:{
                     std::set<Person*> set_difference = (child_mother - (child_mother & child_father));
                     return set_difference;
                     break;
-                
-                case PMod::PATERNAL:
+                }
+                case PMod::PATERNAL:{
                     std::set<Person*> set_difference2 = (child_father - (child_mother & child_father));
                     return set_difference2;
                     break;
-                
-                default:
+                }
+                default:{
                     /*std::set_union(std::begin(child_mother), std::end(child_mother),std::begin(child_father), std::end(child_father),std::inserter(all,std::begin(all)));*/
                     std::set<Person*> uni = ((child_mother | child_father) - (child_mother & child_father));
                     return uni;
                     break;
-                    
+                }
             }
             
-        default:
+        default:{
             switch(pmod) {
              
             case PMod::MATERNAL:
@@ -239,13 +253,16 @@ std::set<Person*> MyPerson::siblings(PMod pmod  , SMod smod  ) {
                 return child_father;
                 break;
             
-            default:
+            
+            default: {
                 std::set<Person*> uni = (child_mother | child_father);
                 return uni;
                 break;
             }
+            }
            
             break;
+    }
     }
     
     
@@ -254,40 +271,48 @@ std::set<Person*> MyPerson::siblings(PMod pmod  , SMod smod  ) {
 std::set<Person*> MyPerson::nieces(PMod pmod  , SMod smod  ) {
     std::set<Person*> sibling_set = siblings(pmod,smod);
     std::set<Person*> niece_set;
+    std::set<Person*> temp;
       for (auto it = sibling_set.begin(); it != sibling_set.end(); ++it) {
           if ((*it) != NULL){
-              niece_set.insert((*it)->daughters());
+              niece_set = (*it)->daughters();
+              temp.insert(niece_set.begin(), niece_set.end());
           }
       }
-      return niece_set;
+      return temp;
     
 }
 
 std::set<Person*> MyPerson::nephews(PMod pmod  , SMod smod  ) {
     std::set<Person*> sibling_set = siblings(pmod,smod);
     std::set<Person*> nephew_set;
+    std::set<Person*> temp;
       for (auto it = sibling_set.begin(); it != sibling_set.end(); ++it) {
           if ((*it) != NULL){
-              nephew_set.insert((*it)->sons());
+              nephew_set=(*it)->sons();
+              temp.insert(nephew_set.begin(), nephew_set.end());
           }
       }
-      return nephew_set;
+      return temp;
     
 }
 
 std::set<Person*> MyPerson::aunts(PMod pmod  , SMod smod  ) {
     switch (pmod) {
-        case PMod::MATERNAL:
+        case PMod::MATERNAL:{
             if (mymother!=NULL)
                 return mymother->sisters(PMod::ANY,smod);
-            return NULL;
+            std::set<Person*> nullset;
+            return nullset;
             break;
+        }
             
-        case PMod::PATERNAL:
+        case PMod::PATERNAL: {
             if (myfather!=NULL)
                 return myfather->sisters(PMod::ANY,smod);
-            return NULL;
+            std::set<Person*> nullset;
+            return nullset;
             break;
+        }
             
         default:
             if ((mymother!=NULL) && (myfather!=NULL)) {
@@ -301,7 +326,8 @@ std::set<Person*> MyPerson::aunts(PMod pmod  , SMod smod  ) {
                 return myfather->sisters(PMod::ANY,smod);
             }
             
-            return NULL;
+            std::set<Person*> nullset;
+            return nullset;;
                 
             break;
     }
@@ -310,19 +336,25 @@ std::set<Person*> MyPerson::aunts(PMod pmod  , SMod smod  ) {
 
 std::set<Person*> MyPerson::uncles(PMod pmod  , SMod smod  ) {
     switch (pmod) {
-        case PMod::MATERNAL:
-            if (mymother!=NULL)
+        case PMod::MATERNAL:{
+            if (mymother!=NULL){
                 return mymother->brothers(PMod::ANY,smod);
-            return NULL;
+            }
+            std::set<Person*> nullset;
+            return nullset;
             break;
-            
-        case PMod::PATERNAL:
-            if (myfather!=NULL)
+        }
+        
+        case PMod::PATERNAL: {
+            if (myfather!=NULL) {
                 return myfather->brothers(PMod::ANY,smod);
-            return NULL;
+            }
+            std::set<Person*> nullset;
+            return nullset;
             break;
+        }
             
-        default:
+        default: {
             if ((mymother!=NULL) && (myfather!=NULL)) {
                 std::set<Person*> uni = (mymother->sisters(PMod::ANY,smod) & myfather->brothers(PMod::ANY,smod));
                 return uni;
@@ -334,23 +366,28 @@ std::set<Person*> MyPerson::uncles(PMod pmod  , SMod smod  ) {
                 return myfather->brothers(PMod::ANY,smod);
             }
             
-            return NULL;
-                
+            std::set<Person*> nullset;
+            return nullset;
             break;
+        }
+        
     }
-    
 }
+    
 
 std::set<Person*> MyPerson::cousins(PMod pmod  , SMod smod  ) {
     std::set<Person*> parents_siblings = (aunts(pmod,smod)) | (uncles(pmod,smod));
     std::set<Person*> cousin_set;
+    std::set<Person*> temp;
     
-    for (auto it = parents_siblings.begin(); it != parents_sibling.end(); ++it) {
+    for (auto it = parents_siblings.begin(); it != parents_siblings.end(); ++it) {
         if ((*it) != NULL){
-            cousin_set.insert((*it)->children());
+            
+            cousin_set=(*it)->children();
+            temp.insert(cousin_set.begin(), cousin_set.end());
         }
     }
-    return cousin_set;
+    return temp;
     
 }
 //coming back
@@ -358,7 +395,7 @@ std::set<Person*> MyPerson::ancestors(PMod pmod  ) {
     std::set<Person*> parent_set = parents(pmod);
     std::set<Person*> temp;
     
-    switch (pmod) {
+   /* switch (pmod) {
         case PMod::MATERNAL:
             parent_set.insert(mymother);
             break;
@@ -369,33 +406,38 @@ std::set<Person*> MyPerson::ancestors(PMod pmod  ) {
             parent_set.insert(mymother);
             parent_set.insert(myfather);
             break;
-    }
+    } */
     
 
     for (auto it = parent_set.begin(); it !=parent_set.end(); ++it) {
         if ((*it) != NULL){
             temp.insert(*it);
-            temp.insert((*it)->ancestors(PMod::ANY));
+            std::set<Person*> temp2 = (*it)->ancestors(PMod::ANY);
+            
+            if (temp2.size() != 0){
+                temp.insert(temp2.begin(), temp2.end());
             }
-    
+        }
+        
     }
-    if (temp.size() != 0)
-        return temp;
-    return NULL;
-    
+    return temp;
     
 }
 
 std::set<Person*> MyPerson::descendants() {
     std::set<Person*> descend = children();
     std::set<Person*> temp;
-    for (auto it = descend.begin(); it !=descend(); ++it) {
+    std::set<Person*> temp2;
+    for (auto it = descend.begin(); it !=descend.end(); ++it) {
         if ((*it) != NULL) {
-            temp.insert((*it)->descendants());
+            temp.insert(*it);
+            std::set<Person*> temp2 = (*it)->descendants();
             }
     }
-    if (temp.size() != 0)
-        return temp;
-    return NULL;
+                         
+    if (temp2.size() != 0){
+                temp.insert(temp2.begin(), temp2.end());
+            }
+    return temp;
     
 }

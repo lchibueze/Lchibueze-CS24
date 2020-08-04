@@ -28,8 +28,8 @@ MyGenePool::MyGenePool(std::istream& stream){
         getline(ss,mother,'\t');
         getline(ss,father,'\t');
         
-        Person* motherptr;
-        Person* fatherptr;
+        MyPerson* motherptr;
+        MyPerson* fatherptr;
         
         Gender my_gender;
         
@@ -49,7 +49,7 @@ MyGenePool::MyGenePool(std::istream& stream){
         else
             fatherptr=find(father);
         
-        Person* temp = new MyPerson(name,my_gender,motherptr,fatherptr);
+        MyPerson* temp = new MyPerson(name,my_gender,motherptr,fatherptr);
         
         if (motherptr != NULL)
             motherptr->addchild (temp);
@@ -57,11 +57,12 @@ MyGenePool::MyGenePool(std::istream& stream){
         if (fatherptr !=NULL)
             fatherptr->addchild (temp);
         
-        MyMap.insert(std::pair<std::string, Person*> (name, temp));
+        MyMap.insert(std::pair<std::string, MyPerson*> (name, temp));
     }
 }
 
-Person* MyGenePool::find(const std::string& name) const{
+
+MyPerson* MyGenePool::find(const std::string& name) const{
     auto temp = MyMap.find(name);
     if (temp==MyMap.end()){
         return NULL;
