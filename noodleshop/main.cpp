@@ -1,8 +1,10 @@
 #include "NoodleShop.h"
 #include "Validator.h"
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <random>
 #include <sstream>
 #include <stdexcept>
@@ -45,7 +47,7 @@ std::vector<Noodle> parse_noodles(std::istream& stream, unsigned int n) {
 std::vector<Order> parse_orders(std::istream& stream, const std::vector<Noodle>& noodles) {
   std::string line;
   if(!std::getline(stream, line)) {
-    throw std::runtime_error("Could not read orer line.");
+    throw std::runtime_error("Could not read order line.");
   }
 
   std::vector<Order> orders;

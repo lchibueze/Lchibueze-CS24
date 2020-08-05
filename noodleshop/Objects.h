@@ -23,7 +23,7 @@ struct Noodle {
   // to make one batch of this noodle.
   int ingredient_cost;
 
-  // The profit from selling one serving.
+  // The amount customers pay for one serving.
   int serving_price;
 };
 
