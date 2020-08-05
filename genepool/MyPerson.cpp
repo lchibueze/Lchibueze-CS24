@@ -265,7 +265,7 @@ std::set<Person*> MyPerson::siblings(PMod pmod  , SMod smod  ) {
     }
     }
     
-    
+    return (child_mother | child_father);
 }
 
 std::set<Person*> MyPerson::nieces(PMod pmod  , SMod smod  ) {
