@@ -38,18 +38,26 @@ std::set<Person*> MyPerson::parents(PMod pmod  ) {
     std::set<Person*> temp;
     
     switch (pmod) {
-        case PMod::MATERNAL:
-            temp.insert(mymother);
+        case PMod::MATERNAL:{
+            if (mymother!=NULL){
+                temp.insert(mymother);
+            }
             break;
+        }
+        case PMod::PATERNAL:{
+            if (myfather!= NULL){
+                temp.insert(myfather);
+            }
+            break;
+        }
             
-        case PMod::PATERNAL:
-            temp.insert(myfather);
+        default:{
+            if (mymother!=NULL)
+                temp.insert(mymother);
+            if (myfather!=NULL)
+                temp.insert(myfather);
             break;
-            
-        default:
-            temp.insert(mymother);
-            temp.insert(myfather);
-            break;
+        }
     }
     return temp;
     
