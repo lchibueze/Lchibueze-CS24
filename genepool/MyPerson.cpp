@@ -223,11 +223,26 @@ std::set<Person*> MyPerson::siblings(PMod pmod  , SMod smod  ) {
     
     switch (smod) {
         case SMod::FULL: {
-       /*     if ((mymother!= NULL) && (myfather== NULL))
-                return child_mother;
-            if ((myfather!= NULL) && (mymother== NULL))
-                return child_father;*/
-            
+            if ((mymother!= NULL) && (myfather== NULL)){
+                //return child_mother;
+                std::set<Person*>temp;
+                for (auto it = child_mother.begin(); it != child_mother.end(); ++it) {
+                         if ((*it)->father() == NULL){
+                             temp.insert(*it);
+                             
+                         }
+                }
+                return temp;
+            }
+            if ((myfather!= NULL) && (mymother== NULL)){
+                std::set<Person*>temp;
+                for (auto it = child_father.begin(); it != child_father.end(); ++it) {
+                        if ((*it)->mother() == NULL){
+                            temp.insert(*it);
+                                           }
+                        }
+                    return temp;
+                }
             std::set<Person*> intersection = (child_mother & child_father);
             return intersection;
             break;
