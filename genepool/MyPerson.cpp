@@ -383,7 +383,7 @@ std::set<Person*> MyPerson::uncles(PMod pmod  , SMod smod  ) {
             
         default: {
             if ((mymother!=NULL) && (myfather!=NULL)) {
-                std::set<Person*> uni = (mymother->sisters(PMod::ANY,smod) | myfather->brothers(PMod::ANY,smod));
+                std::set<Person*> uni = (mymother->brothers(PMod::ANY,smod) | myfather->brothers(PMod::ANY,smod));
                 return uni;
             }
             else if ((mymother!=NULL)){
