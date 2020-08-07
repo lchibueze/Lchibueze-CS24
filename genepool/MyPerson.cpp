@@ -459,12 +459,12 @@ std::set<Person*> MyPerson::descendants() {
         if ((*it) != NULL) {
             temp.insert(*it);
             std::set<Person*> temp2 = (*it)->descendants();
-            }
-    }
-                         
-    if (temp2.size() != 0){
+            
+            if (temp2.size() != 0){
                 temp.insert(temp2.begin(), temp2.end());
             }
+        }
+    }
     return temp;
     
 }
