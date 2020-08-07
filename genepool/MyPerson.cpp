@@ -208,12 +208,15 @@ std::set<Person*> MyPerson::sisters(PMod pmod  , SMod smod  ) {
 std::set<Person*> MyPerson::siblings(PMod pmod  , SMod smod  ) {
     std::set<Person*>child_mother;
     std::set<Person*>child_father;
+    std::set<Person*>me;
+    me.insert(this);
     
     if (mymother!=NULL){
-        child_mother = mymother->children();
+        child_mother = mymother->children() - me;
+        
     }
     if (myfather!=NULL){
-        child_father = myfather->children();
+        child_father = myfather->children() - me;
     }
     std::set<Person*>any_sibling;
     
