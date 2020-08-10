@@ -90,13 +90,13 @@ std::vector<Order> MyNoodleShop::orders(int minute, std::vector<Order> orderlist
 }
 Action* MyNoodleShop::action(int minute){
     if(minute%5 == 0){
-       int dirtypot = stale_empty();
-           if (dirtypot != -1){
-               clean_pots(dirtypot);
-              // std::cout<<"CleanAction("<<dirtypot<<")"<<std::endl;
-               CleanAction* temp = new CleanAction(dirtypot);
-               return temp;
-           }
+//       int dirtypot = stale_empty();
+//           if (dirtypot != -1){
+//               clean_pots(dirtypot);
+//              // std::cout<<"CleanAction("<<dirtypot<<")"<<std::endl;
+//               CleanAction* temp = new CleanAction(dirtypot);
+//               return temp;
+//           }
     }
 
    
