@@ -11,7 +11,9 @@ NoodleShop* NoodleShop::create(int npots, int rent, int customers, std::vector<N
 
 
 MyNoodleShop::MyNoodleShop(int npots, int rent, int customers, std::vector<Noodle> noodles){
-    
+    // if(noodles.size()){
+    //     std::cout<<npots <<rent<<customers;
+    // }
     mypots=npots;
     mrent=rent;
     shop_noodles = noodles;
@@ -57,10 +59,13 @@ MyNoodleShop::MyNoodleShop(int npots, int rent, int customers, std::vector<Noodl
         shop_pots.push_back(temp);
     
     }
-    std::cout<<exp_cust;
+    // std::cout<<exp_cust;
 }
 
 std::vector<Order> MyNoodleShop::orders(int minute, std::vector<Order> orderlist) {
+//    if(minute == 1){
+//        std::cout<<"";
+//     }
     update_currorders();
     update_pots();
     if (minute >=719){
@@ -84,55 +89,86 @@ std::vector<Order> MyNoodleShop::orders(int minute, std::vector<Order> orderlist
     return accepted_orders;
 }
 Action* MyNoodleShop::action(int minute){
-   // if (curr_orders.size()!=0)
+    if(minute == 1){
+        std::cout<<"";
+    }
+//
+//    std::cout<<"curr_orders: {";
+//    for(unsigned long i = 0; i<curr_orders.size(); i++){
+//        std::cout<<curr_orders[i].order.id<< "."<<curr_orders[i].order.noodle<<" ";
+//    }
+//    std::cout<<"}"<<std::endl;
+//
+//    if (curr_orders.size()!=0)
     std::vector<serve_info> pre_serve;
-    std::vector<Serve> serving;
-        for (unsigned long i=0;i<curr_orders.size();i++){
-            int temp = checknoodle(curr_orders[i].order.noodle);
-            if (temp!= -1) {
-                if ((shop_pots[temp].time_until_stale>0) && (shop_pots[temp].cooking_mins_left==0)){
-                    serve_info a;
-                    a.order = curr_orders[i].order;
-                    a.index = i;
-                    pre_serve.push_back(a);
-                        
-                }
-                
+    for (unsigned long i=0;i<curr_orders.size();i++){
+        int temp = noodle_cooked(curr_orders[i].order.noodle); //returns -1 if there arent any cooked noodles in the pots
+        if (temp != -1) {
+            if ((shop_pots[temp].time_until_stale>0) && (shop_pots[temp].cooking_mins_left==0) && (shop_pots[temp].servings_left>0)){
+                serve_info a;
+                a.order = curr_orders[i].order;
+                a.index = i;
+                pre_serve.push_back(a);
             }
+            
         }
+    }
     if (pre_serve.size()==0){
         if (anycleanpots()) { /*we can't cook a noodle if it takes 10 minutes to cook if it is 8:25 depending on batch size*/
-            int pot_id = cooknoodle(Findnoodle (curr_orders[0].order.noodle));
-            CookAction* temp = new CookAction(pot_id,curr_orders[0].order.noodle);
-            return temp;
+            // check if the noodle we're cooking is already being cooked, if so, move on to next noodle. (if more orders coming in than orders being cooked, cook another batch)
+            for(unsigned long i = 0; i<curr_orders.size(); i++){
+                //if there aren't any noodles with order.noodle name being cooked, cook the noodle.
+                if(noodle_cooking(curr_orders[i].order.noodle) == -1){
+                    int pot_id = cooknoodle(Findnoodle(curr_orders[i].order.noodle));
+                    //std::cout<<"CookAction("<<pot_id<<" "<<curr_orders[i].order.noodle<<")"<<std::endl;
+                    CookAction* temp = new CookAction(pot_id,curr_orders[i].order.noodle);
+                    // std::cout<<curr_orders[0].order.noodle<<std::endl; for debugging
+                    return temp;
+                }
+            }
         }
         int dirtypot = stale_empty();
-        if (dirtypot!=-1){
+        if (dirtypot != -1){
             clean_pots(dirtypot);
+           // std::cout<<"CleanAction("<<dirtypot<<")"<<std::endl;
             CleanAction* temp = new CleanAction(dirtypot);
             return temp;
         }
-        std::cout<<minute;
+       // std::cout<<"NoAction()"<<std::endl;
         NoAction* temp = new NoAction();
         return temp;
     }
     else {
-        for (unsigned long serve=0; serve<pre_serve.size(); serve++){
+        std::vector<Serve> serving;
+        //std::cout<<"pre_serve contains: ";
+//        for(unsigned int i = 0; i<pre_serve.size(); i++){
+//           // std::cout<<pre_serve[i].order.noodle<< " ";
+//        }
+
+
+
+
+        ///////////////////////
+        //std::cout<<std::endl;
+        int deleted = 0;
+        for (unsigned long serve = 0; serve<pre_serve.size(); serve++){
             for (unsigned long pot=0; pot<shop_pots.size();pot++){
-                if ((shop_pots[pot].noodlename==pre_serve[serve].order.noodle) && servenoodle(pre_serve[serve].index, pot)){
+                if ((pre_serve[serve].order.noodle==shop_pots[pot].noodlename) && servenoodle(pre_serve[serve].index - deleted, pot)){
                     Serve temp;
                     temp.order_id = pre_serve[serve].order.id;
                     temp.pot_id = pot;
                     serving.push_back(temp);
+                    deleted++;
                     break;
-                
                 }
             }
         }
+       // std::cout<<"ServeAction()"<<std::endl;
         ServeAction* ret = new ServeAction (serving);
         return ret;
     }
         
+    return new NoAction();
 }
 
 Noodle MyNoodleShop::Findnoodle(std::string name){
@@ -145,16 +181,19 @@ Noodle MyNoodleShop::Findnoodle(std::string name){
     
 }
 
+//returns the index of the noodle that's ready to be served
 int MyNoodleShop::checknoodle(std::string name){
-    for (unsigned long i=0; i<shop_pots.size(); i++) {
-        if (shop_pots[i].noodlename==name)
+    for(unsigned long i = 0; i<shop_pots.size(); i++){
+        if((shop_pots[i].noodlename == name)){
             return i;
+        }
     }
     return -1;
 }
 
 bool MyNoodleShop::anycleanpots(){
     for (unsigned long i=0; i<shop_pots.size(); i++){
+        // std::cout<<shop_pots[i].isClean<<std::endl;
         if (shop_pots[i].isClean)
             return true;
     }
@@ -165,16 +204,21 @@ void MyNoodleShop::update_currorders(){
     for (unsigned long i=0; i<curr_orders.size();i++){
         curr_orders[i].time++;
         if (curr_orders[i].tip_left>0)
-             curr_orders[i].tip_left-=10;
-            }
+            curr_orders[i].tip_left-=10;
+    }
 }
 
 void MyNoodleShop::update_pots(){
     for (unsigned long i=0; i<shop_pots.size();i++){
         if (!shop_pots[i].isClean){
-            if (shop_pots[i].cooking_mins_left > 0)
+            if (shop_pots[i].cooking_mins_left > 0){
                 shop_pots[i].cooking_mins_left--;
-            shop_pots[i].time_until_stale--;
+            }
+            else{
+                if (shop_pots[i].time_until_stale > 0)
+                    shop_pots[i].time_until_stale--;
+               // std::cout<<shop_pots[i].noodlename<<" is ready"<<std::endl;
+            }
         }
     }
 }
@@ -209,18 +253,35 @@ void MyNoodleShop::clean_pots(int pot_id) {
     shop_pots[pot_id].isClean = true;
     shop_pots[pot_id].noodlename = "";
     shop_pots[pot_id].cooking_mins_left = shop_pots[pot_id].time_until_stale = shop_pots[pot_id].servings_left = -1;
-    
+    // std::cout<<pot_id<<std::endl;
 }
 
 int MyNoodleShop::stale_empty(){
     for (unsigned long i=0; i<shop_pots.size(); i++){
-        if (shop_pots[i].time_until_stale<=0 || shop_pots[i].servings_left<=0)
+        if (shop_pots[i].time_until_stale == 0 || shop_pots[i].servings_left == 0)
             return i;
     }
     return -1;
 }
 
+//return i if noodle with "noodlename" is currently being cooked in our pots
+//return -1 otherwise
+int MyNoodleShop::noodle_cooking(std::string noodlename){
+    for(unsigned long i = 0; i<shop_pots.size(); i++){
+        if((shop_pots[i].noodlename == noodlename) && (shop_pots[i].cooking_mins_left > 0)){
+            return i;
+        }
+    }
+    return -1;
+}
+
+int MyNoodleShop::noodle_cooked(std::string noodlename){
+    for(unsigned long i = 0; i<shop_pots.size(); i++){
+        if((shop_pots[i].noodlename == noodlename) && (shop_pots[i].cooking_mins_left == 0)){
+            return i;
+        }
+    }
+    return -1;
+}
 MyNoodleShop::~MyNoodleShop(){}
-
-
 

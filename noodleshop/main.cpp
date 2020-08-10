@@ -91,6 +91,7 @@ int main(int argc, char** argv) {
     std::string line;
     std::ifstream file(argv[1]);
 
+
     if(!std::getline(file, line)) {
       throw std::runtime_error("Could not read file!");
     }
@@ -109,6 +110,7 @@ int main(int argc, char** argv) {
       std::istringstream linestream(line);
       auto in = parse_orders(linestream, noodles);
       auto ok = shop->orders(minute, in);
+        
 
       std::vector<Order> accepted;
       std::set_intersection(
