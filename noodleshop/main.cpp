@@ -145,9 +145,9 @@ int main(int argc, char** argv) {
       
       minute += 1;
       validator.printLog();
-      // if(minute == 98){
-      //   exit(0);
-      // }
+      if(minute == 150){
+        exit(0);
+      }
     }
 
     validator.summarize();
