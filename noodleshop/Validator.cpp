@@ -232,3 +232,30 @@ void Validator::validate(const ServeAction* action) {
     pot.servings -= 1;
   }
 }
+
+
+void Validator::printLog(){
+  std::cout << "      Profit        Loss         Net  Noodle\n";
+  std::cout << std::fixed << std::setprecision(2);
+  for(const auto& pair: mNoodles) {
+    const NoodleInfo& n = pair.second;
+    std::cout << std::setw(12) << float(n.profit) / 100
+              << std::setw(12) << float(n.loss)   / 100
+              << std::setw(12) << float(n.profit - n.loss) / 100
+              << "  " << pair.first << '\n';
+  }
+
+  std::cout << std::setw(12) << float(mIncome)         / 100
+            << std::setw(12) << float(mCoGS)           / 100
+            << std::setw(12) << float(mIncome - mCoGS) / 100
+            << "  SUBTOTAL\n\n";
+
+  std::cout << std::setw(24) << float(mRent) /  100
+            << std::setw(12) << float(mRent) / -100
+            << "  Rent\n";
+
+  std::cout << std::setw(12) << float(mIncome)                 / 100
+            << std::setw(12) << float(mCoGS + mRent)           / 100
+            << std::setw(12) << float(mIncome - mCoGS - mRent) / 100
+            << "  TOTAL\n";
+}

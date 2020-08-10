@@ -61,6 +61,9 @@ public:
   void validate(const CleanAction* action);
   void validate(const ServeAction* action);
   void validate(const NoAction*    action);
+
+
+  void printLog();
 };
 
 #endif

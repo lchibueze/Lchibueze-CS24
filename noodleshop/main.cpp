@@ -70,6 +70,11 @@ std::vector<Order> parse_orders(std::istream& stream, const std::vector<Noodle>&
   return orders;
 }
 
+// std::vector<Noodle> getPriority(std::istream& file){
+//   //will read though file, assign noodle of highest priorty to the minute (index of vector), 
+//   //...if all same, cook cheapest one...
+
+// }
 
 int main(int argc, char** argv) {
   if(argc != 2) {
@@ -90,7 +95,7 @@ int main(int argc, char** argv) {
   try {
     std::string line;
     std::ifstream file(argv[1]);
-
+    //std::ifstream file("data/lunch-rush.tsv");
 
     if(!std::getline(file, line)) {
       throw std::runtime_error("Could not read file!");
@@ -109,8 +114,14 @@ int main(int argc, char** argv) {
     while(std::getline(file, line)) {
       std::istringstream linestream(line);
       auto in = parse_orders(linestream, noodles);
+
+      std::cout<<"orders: "; 
+      for(unsigned long i = 0; i< in.size(); i++){
+        std::cout<<in[i].noodle << " ";
+      }
+      std::cout<<std::endl;
+
       auto ok = shop->orders(minute, in);
-        
 
       std::vector<Order> accepted;
       std::set_intersection(
@@ -118,11 +129,25 @@ int main(int argc, char** argv) {
         std::inserter(accepted, accepted.begin())
       );
 
+      std::cout<<"Accepted orders: ";
+      for(unsigned long i = 0; i<accepted.size(); i++){
+        std::cout<<accepted[i].noodle<< " ";
+      }
+      std::cout<<std::endl;
+
       validator.orders(minute, accepted);
       Action* action = shop->action(minute);
       validator.validate(action);
+
+      std::cout<<minute<<std::endl;
+
       delete action;
+      
       minute += 1;
+      validator.printLog();
+      // if(minute == 98){
+      //   exit(0);
+      // }
     }
 
     validator.summarize();

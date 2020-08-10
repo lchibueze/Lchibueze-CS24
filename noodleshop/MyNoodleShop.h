@@ -70,7 +70,6 @@ public:
     int stale_empty ();
 
     int noodle_cooking(std::string noodlename);
-    
     int noodle_cooked(std::string noodlename);
 };
 
