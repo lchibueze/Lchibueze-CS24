@@ -89,39 +89,17 @@ std::vector<Order> MyNoodleShop::orders(int minute, std::vector<Order> orderlist
     return accepted_orders;
 }
 Action* MyNoodleShop::action(int minute){
-    if(minute%10 == 0){
-         int dirtypot = stale_empty();
+    if(minute%5 == 0){
+       int dirtypot = stale_empty();
            if (dirtypot != -1){
                clean_pots(dirtypot);
               // std::cout<<"CleanAction("<<dirtypot<<")"<<std::endl;
                CleanAction* temp = new CleanAction(dirtypot);
                return temp;
            }
-        if (anycleanpots()) { /*we can't cook a noodle if it takes 10 minutes to cook if it is 8:25 depending on batch size*/
-            // check if the noodle we're cooking is already being cooked, if so, move on to next noodle. (if more orders coming in than orders being cooked, cook another batch)
-            for(unsigned long i = 0; i<curr_orders.size(); i++){
-                //if there aren't any noodles with order.noodle name being cooked, cook the noodle.
-                if(noodle_cooking(curr_orders[i].order.noodle) == -1){
-                    int pot_id = cooknoodle(Findnoodle(curr_orders[i].order.noodle));
-                    //std::cout<<"CookAction("<<pot_id<<" "<<curr_orders[i].order.noodle<<")"<<std::endl;
-                    CookAction* temp = new CookAction(pot_id,curr_orders[i].order.noodle);
-                    // std::cout<<curr_orders[0].order.noodle<<std::endl; for debugging
-                    return temp;
-                }
-            }
-        }
     }
-    
-        
-        
-//
-//    std::cout<<"curr_orders: {";
-//    for(unsigned long i = 0; i<curr_orders.size(); i++){
-//        std::cout<<curr_orders[i].order.id<< "."<<curr_orders[i].order.noodle<<" ";
-//    }
-//    std::cout<<"}"<<std::endl;
-//
-//    if (curr_orders.size()!=0)
+
+   
     std::vector<serve_info> pre_serve;
     for (unsigned long i=0;i<curr_orders.size();i++){
         int temp = noodle_cooked(curr_orders[i].order.noodle); //returns -1 if there arent any cooked noodles in the pots
