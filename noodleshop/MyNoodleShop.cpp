@@ -1,5 +1,6 @@
 #include "MyNoodleShop.h"
 #include <iostream>
+#include <algorithm>
 
 // This is here to avoid creating yet another object file.
 NoodleShop* NoodleShop::create(int npots, int rent, int customers, std::vector<Noodle> noodles) {
@@ -7,9 +8,17 @@ NoodleShop* NoodleShop::create(int npots, int rent, int customers, std::vector<N
 }
 
 
+//will be used to sort shop_noodles
+bool getRatio(const Noodle &a, const Noodle &b)
+{
+    return (a.batch_size*a.serving_price/a.ingredient_cost) > (b.batch_size*b.serving_price/b.ingredient_cost);
+}
+
+bool sortOrders(const Order &a, const Order &b){
+    return a.id < b.id;
+}
+
 // MyNoodleShop Member Functions
-
-
 MyNoodleShop::MyNoodleShop(int npots, int rent, int customers, std::vector<Noodle> noodles){
     // if(noodles.size()){
     //     std::cout<<npots <<rent<<customers;
@@ -17,6 +26,8 @@ MyNoodleShop::MyNoodleShop(int npots, int rent, int customers, std::vector<Noodl
     mypots=npots;
     mrent=rent;
     shop_noodles = noodles;
+    // looking through the 'orderlist', we will order the 'orderlist' from highest (servings*price/serving)/cost ratio.
+    std::sort(shop_noodles.begin(), shop_noodles.end(), getRatio);
     exp_cust=customers;
     //served_cust = 0;
    // money=rent*(-1);
@@ -62,23 +73,42 @@ MyNoodleShop::MyNoodleShop(int npots, int rent, int customers, std::vector<Noodl
     // std::cout<<exp_cust;
 }
 
-std::vector<Order> MyNoodleShop::orders(int minute, std::vector<Order> orderlist) {
-//    if(minute == 1){
-//        std::cout<<"";
-//     }
+std::vector<Order> MyNoodleShop::orders(int minute, std::vector<Order> order_list) {
     update_currorders();
     update_pots();
     if (minute >=719){
         std::vector<Order> temp;
         return temp;
     }
+
     std::vector<Order> accepted_orders;
+    int pots_reserved = 0;
+    
+    std::vector<Order> orderlist;
+    // std::cout<<"SHOP_NOODLES: ";
+    for(unsigned long i = 0; i<shop_noodles.size(); i++){
+        // std::cout<<shop_noodles[i].name<< " ";
+        for(unsigned long j = 0; j<order_list.size(); j++){
+            if(shop_noodles[i].name == order_list[j].noodle){
+                orderlist.push_back(order_list[j]);
+            }
+        }
+    }
+    // exit(0);
+
+
+
     for (unsigned long i=0;i<orderlist.size();i++){
+        //check to see if the noodle is ready to be served
         if (checknoodle(orderlist[i].noodle)!=-1)
             accepted_orders.push_back(orderlist[i]);
-        else if (anycleanpots())
+        //if there are any clean pots (to cook noodles)
+        else if (anycleanpots() - pots_reserved > 0){
             accepted_orders.push_back(orderlist[i]);
+            pots_reserved++;
+        }
     }
+
     for (unsigned long i=0;i<accepted_orders.size(); i++){
         order_detail temp;
         temp.order = accepted_orders[i];
@@ -86,20 +116,29 @@ std::vector<Order> MyNoodleShop::orders(int minute, std::vector<Order> orderlist
         temp.tip_left=100;
         curr_orders.push_back(temp);
     }
+
+    std::sort(accepted_orders.begin(), accepted_orders.end(), sortOrders);
     return accepted_orders;
 }
 Action* MyNoodleShop::action(int minute){
+    //try cleaning/cooking after every 5 mins
     if(minute%5 == 0){
-//       int dirtypot = stale_empty();
-//           if (dirtypot != -1){
-//               clean_pots(dirtypot);
-//              // std::cout<<"CleanAction("<<dirtypot<<")"<<std::endl;
-//               CleanAction* temp = new CleanAction(dirtypot);
-//               return temp;
-//           }
+    //     int dirtypot = stale_empty();
+    //     if (dirtypot != -1){
+    //         clean_pots(dirtypot);
+    //         std::cout<<"CleanAction("<<dirtypot<<")"<<std::endl;
+    //         CleanAction* temp = new CleanAction(dirtypot);
+    //         return temp;
+    //     }
     }
 
-   
+//    std::cout<<"curr_orders: {";
+//    for(unsigned long i = 0; i<curr_orders.size(); i++){
+//        std::cout<<curr_orders[i].order.id<< "."<<curr_orders[i].order.noodle<<" ";
+//    }
+//    std::cout<<"}"<<std::endl;
+
+   // if (curr_orders.size()!=0)
     std::vector<serve_info> pre_serve;
     for (unsigned long i=0;i<curr_orders.size();i++){
         int temp = noodle_cooked(curr_orders[i].order.noodle); //returns -1 if there arent any cooked noodles in the pots
@@ -114,13 +153,13 @@ Action* MyNoodleShop::action(int minute){
         }
     }
     if (pre_serve.size()==0){
-        if (anycleanpots()) { /*we can't cook a noodle if it takes 10 minutes to cook if it is 8:25 depending on batch size*/
+        if (anycleanpots() != 0) { /*we can't cook a noodle if it takes 10 minutes to cook if it is 8:25 depending on batch size*/
             // check if the noodle we're cooking is already being cooked, if so, move on to next noodle. (if more orders coming in than orders being cooked, cook another batch)
             for(unsigned long i = 0; i<curr_orders.size(); i++){
                 //if there aren't any noodles with order.noodle name being cooked, cook the noodle.
                 if(noodle_cooking(curr_orders[i].order.noodle) == -1){
                     int pot_id = cooknoodle(Findnoodle(curr_orders[i].order.noodle));
-                    //std::cout<<"CookAction("<<pot_id<<" "<<curr_orders[i].order.noodle<<")"<<std::endl;
+//                    std::cout<<"CookAction("<<pot_id<<" "<<curr_orders[i].order.noodle<<")"<<std::endl;
                     CookAction* temp = new CookAction(pot_id,curr_orders[i].order.noodle);
                     // std::cout<<curr_orders[0].order.noodle<<std::endl; for debugging
                     return temp;
@@ -130,20 +169,20 @@ Action* MyNoodleShop::action(int minute){
         int dirtypot = stale_empty();
         if (dirtypot != -1){
             clean_pots(dirtypot);
-           // std::cout<<"CleanAction("<<dirtypot<<")"<<std::endl;
+            //std::cout<<"CleanAction("<<dirtypot<<")"<<std::endl;
             CleanAction* temp = new CleanAction(dirtypot);
             return temp;
         }
-       // std::cout<<"NoAction()"<<std::endl;
+        //std::cout<<"NoAction()"<<std::endl;
         NoAction* temp = new NoAction();
         return temp;
     }
     else {
         std::vector<Serve> serving;
         //std::cout<<"pre_serve contains: ";
-//        for(unsigned int i = 0; i<pre_serve.size(); i++){
-//           // std::cout<<pre_serve[i].order.noodle<< " ";
-//        }
+        for(unsigned int i = 0; i<pre_serve.size(); i++){
+          //  std::cout<<pre_serve[i].order.noodle<< " ";
+        }
 
 
 
@@ -191,13 +230,15 @@ int MyNoodleShop::checknoodle(std::string name){
     return -1;
 }
 
-bool MyNoodleShop::anycleanpots(){
+//returns the number of clean pots
+int MyNoodleShop::anycleanpots(){
+    int counter = 0;
     for (unsigned long i=0; i<shop_pots.size(); i++){
         // std::cout<<shop_pots[i].isClean<<std::endl;
         if (shop_pots[i].isClean)
-            return true;
+            counter++;
     }
-    return false;
+    return counter;
 }
 
 void MyNoodleShop::update_currorders(){

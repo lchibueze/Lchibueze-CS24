@@ -57,7 +57,7 @@ public:
     
     bool servenoodle(int order_index,int pot_id);
     
-    bool anycleanpots();
+    int anycleanpots();
     
     void update_currorders();
     
