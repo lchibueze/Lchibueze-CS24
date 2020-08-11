@@ -70,11 +70,75 @@ std::vector<Order> parse_orders(std::istream& stream, const std::vector<Noodle>&
   return orders;
 }
 
-// std::vector<Noodle> getPriority(std::istream& file){
-//   //will read though file, assign noodle of highest priorty to the minute (index of vector), 
-//   //...if all same, cook cheapest one...
+std::vector<Noodle> getPriority(std::istream& file){
+  //will read though file, assign noodle of highest priorty to the minute (index of vector), 
+  //...if all same, cook cheapest one...
+  std::string line;
+  unsigned int npots;
+  unsigned int rent;
+  unsigned int expect;
+  unsigned int nnoodles;
+  std::vector<Noodle> noodles;
+  std::vector<Noodle> future;
+  NoodleShop* shop = nullptr;
 
-// }
+  if(!std::getline(file, line)) {
+      throw std::runtime_error("Could not read file!");
+    }
+
+    std::istringstream metadata(line);
+    if(!(metadata >> npots >> rent >> expect >> nnoodles)) {
+      throw std::runtime_error("Could not read metadata!");
+    }
+
+    noodles = parse_noodles(file, nnoodles);
+    shop = NoodleShop::create(npots, rent, expect, noodles);
+    std::map<int, Noodle> noodleMap;
+    for(unsigned long i = 0; i<noodles.size(); i++){
+      noodleMap.insert(std::pair<int, Noodle>(i, noodles[i]));
+    }
+
+    unsigned int minute = 0;
+    while(std::getline(file, line)) {
+      std::istringstream linestream(line);
+      
+      //add tab delimiter
+      int priority = -1;
+      double temp = 0;
+      int counter = 0;
+      std::string temp_line;
+      std::vector<double> info;
+      while(std::getline(linestream, temp_line, '\t')){
+          double temp1 = std::stod(temp_line);
+          info.push_back(temp1);
+          if(temp1 > temp){
+            temp = temp1;
+            priority = counter;
+          }
+
+          counter++;
+      }
+      bool same = true;
+      for(unsigned long i = 1; i<info.size(); i++){
+        if(info[i-1] != info[i]){
+          same = false;
+        }
+      }
+
+      //will push a "NULL" named noodle to the future vector if all values are the same (no predictibility)
+      if(same){
+        Noodle a;
+        a.name = "NULL";
+        future.push_back(a);
+      }
+      else{
+        future.push_back(noodleMap[priority]);
+      }
+      minute += 1;
+    }
+
+    return future;
+}
 
 int main(int argc, char** argv) {
   if(argc != 2) {
@@ -94,6 +158,13 @@ int main(int argc, char** argv) {
 
   try {
     std::string line;
+    std::ifstream temp(argv[1]);
+    std::vector<Noodle> future = getPriority(temp); //IMPORTANT
+    // for (unsigned long i = 0; i<future.size(); i++){
+    //   std::cout<<i <<" "<< future[i].name<<std::endl;
+    // }
+    // exit(0);
+
     std::ifstream file(argv[1]);
     //std::ifstream file("data/lunch-rush.tsv");
 
@@ -145,9 +216,9 @@ int main(int argc, char** argv) {
       
       minute += 1;
       validator.printLog();
-      if(minute == 150){
-        exit(0);
-      }
+      // if(minute == 1){
+      //   exit(0);
+      // }
     }
 
     validator.summarize();

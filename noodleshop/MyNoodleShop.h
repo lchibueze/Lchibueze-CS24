@@ -30,10 +30,13 @@ class MyNoodleShop: public NoodleShop {
            int index;
        };
     
+    int pots_reserved;
+    std::vector<int> pot_reserved_servings;
     std::vector<Pot> shop_pots;
     std::vector<Noodle> shop_noodles;    // Information about the noodles you're selling.
+    std::vector<Noodle> future;
     //int money;
-
+    
     std::vector<order_detail> curr_orders;
     
    
@@ -52,11 +55,11 @@ public:
 
   // Other Member Functions
     Noodle Findnoodle(std::string name);
-    
+    int potswithnoodle(std::string name);
     int checknoodle(std::string name);
-    
+    int findNoodleDemand(std::string);
     bool servenoodle(int order_index,int pot_id);
-    
+    void addFuture(std::vector<Noodle> future_vector);
     int anycleanpots();
     
     void update_currorders();
