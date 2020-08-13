@@ -32,3 +32,4 @@ _All assignments are individual assignents._
 _You can work on challenge labs in pairs if you choose to._
 
 - [Noodle Shop](noodleshop): Making noodles (and money).
+- [Call Center](callcenter): Get your priorities straight.
