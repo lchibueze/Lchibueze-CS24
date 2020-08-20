@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
   }
 
   // Increase this to get more output!
-  int verbosity = 0;
+  int verbosity = 3;
 
   CallCenter* center = nullptr;
 
@@ -83,12 +83,13 @@ int main(int argc, char** argv) {
       std::vector<Call> learned = validator.validate(minute, actions);
       center->learn(minute, learned);
       minute += 1;
+      std::cout<<minute;
     }
 
     validator.summarize();
   }
   catch(const validation_error& e) {
-    std::cerr << "Inavlid action: " << e.what() << "\n";
+    std::cerr << "Invalid action: " << e.what() << "\n";
     delete center;
     std::exit(1);
   }
