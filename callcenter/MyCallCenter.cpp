@@ -1,4 +1,5 @@
 #include "MyCallCenter.h"
+#include <iostream>
 
 CallCenter* CallCenter::create(std::vector<Employee> employees) {
   return new MyCallCenter(employees);
@@ -32,9 +33,9 @@ bool MyCallCenter::orderSkill (const Employee_Helper &a, const Employee_Helper &
   return a.e.skill<=b.e.skill;
 }
 
-/*bool MyCallCenter::orderImportance (const Employee_Helper &a, const Employee_Helper &b){
+bool MyCallCenter::orderImportance (const Employee_Helper &a, const Employee_Helper &b){
   return a.e.call->importance<=b.e.call->importance;
-} */
+} 
 
 bool MyCallCenter::holdpoolImp(std::pair<int,Call*> &a, std::pair<int,Call*> &b){ 
   return a.second->importance<=b.second->importance;
@@ -92,24 +93,26 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
     }
 
     //Step 2 - Find free employee for priority pool calls
-    std::sort(priority_pool.begin(), priority_pool.end()), std::greater<int>();
+    //std::sort(priority_pool.begin(), priority_pool.end()), std::greater<int>();
 
     int count =priority_pool.size()-1;
-    for (unsigned long j = priority_pool.size()-1; j>=0; j--){
-      std::sort(mHelper.begin(), mHelper.end(),orderSkill);
-      //code for algorithm of going back and forth with skillsets of employee
-      int start=mHelper.size()/2;
-      for (unsigned long i=0; i<mHelper.size(); i++){
-        if (i%2==0) {
-          if (work[mHelper[start+i].e.id]==0) {
-          work[mHelper[start+i].e.id] = priority_pool[j];
-          accepted_learn_ids.push_back(priority_pool[j]);
-          priority_pool.erase(priority_pool.begin()+j); 
+    
+    if (count >=0) {
+      for (unsigned long j = priority_pool.size()-1; j>=0; j--){
+        std::cout<<"value of j "<<j<<std::endl;
+        std::sort(mHelper.begin(), mHelper.end(),orderSkill);
+        //code for algorithm of going back and forth with skillsets of employee
+        int start=mHelper.size()/2;
+          for (unsigned long i=0; i<mHelper.size(); i++){
+            if (i%2==0) {
+              if (work[mHelper[start+i].e.id]==0) {
+                work[mHelper[start+i].e.id] = priority_pool[j];
+                accepted_learn_ids.push_back(priority_pool[j]);
+                priority_pool.erase(priority_pool.begin()+j); 
 
-          count--;
-          } 
-  
-        }
+                count--;
+              }  
+            }
         else {
          if (work[mHelper[start-i].e.id]==0) {
           work[mHelper[start-i].e.id] = priority_pool[j];
@@ -120,6 +123,9 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
         }
       }
     }
+    
+
+   
 //Step 3 - finding employees with non important calls for priority pool calls
   unsigned long temp=0; 
   for(unsigned long i=count;i>=0;i--){
@@ -131,54 +137,58 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
           mHelper[temp].next_call=priority_pool[i];
           temp++; 
         }
-      }
+      } 
 
-
+    }
 //Step 4 - repeat step two and three for call ids
-  std::sort(call_ids.begin(), call_ids.end()), std::greater<int>();
-  count =call_ids.size()-1;
-    for (unsigned long j = call_ids.size()-1; j>=0; j--){
-      std::sort(mHelper.begin(), mHelper.end(),orderSkill);
-      //code for algorithm of going back and forth with skillsets of employee
-      int start=mHelper.size()/2;
-      for (unsigned long i=0; i<mHelper.size(); i++){
-        if (i%2==0) {
-          if (work[mHelper[start+i].e.id]==0) {
-          work[mHelper[start+i].e.id] = call_ids[j];
-          accepted_learn_ids.push_back(call_ids[j]);
-          //int *x=&j;
-          call_ids.erase(call_ids.begin()+j); 
+      std::sort(call_ids.begin(), call_ids.end()), std::greater<int>();
+      count =call_ids.size()-1;
+      if (count>=0) {
+        for (unsigned long j = call_ids.size()-1; j>=0; j--){
+          std::sort(mHelper.begin(), mHelper.end(),orderSkill);
+         //code for algorithm of going back and forth with skillsets of employee
+          int start=mHelper.size()/2;
+            for (unsigned long i=0; i<mHelper.size(); i++){
+              if (i%2==0) {
+                if (work[mHelper[start+i].e.id]==0) {
+                work[mHelper[start+i].e.id] = call_ids[j];
+                accepted_learn_ids.push_back(call_ids[j]);
+                //int *x=&j;
+                call_ids.erase(call_ids.begin()+j); 
 
-          count--;
-          } 
-  
-        }
-        else {
-         if (work[mHelper[start-i].e.id]==0) {
-          work[mHelper[start-i].e.id] = call_ids[j];
-          accepted_learn_ids.push_back(call_ids[j]);
-          call_ids.erase(call_ids.begin()+j); 
-          count--;
-          } 
-        }
-      }
+                count--;
+                } 
+        
+              }
+              else {
+                if (work[mHelper[start-i].e.id]==0) {
+                  work[mHelper[start-i].e.id] = call_ids[j];
+                  accepted_learn_ids.push_back(call_ids[j]);
+                  call_ids.erase(call_ids.begin()+j); 
+                  count--;
+                } 
+              }
+            }
     }
 
-  temp=0; 
-  for(unsigned long i=count;i>=0;i--){
-   // std::sort(mHelper.begin(), mHelper.end(),orderImportance);
-    if (temp<mHelper.size()){
-      while (((mHelper[temp].e.call->id) != (work[mHelper[temp].e.id])) || (work[mHelper[temp].e.id]!=-1)){
-          temp++; 
-          }
-          mHelper[temp].next_call=call_ids[i];
-          temp++; 
+  
+  unsigned int temp=0; 
+    for(unsigned long i=count;i>=0;i--){
+    // std::sort(mHelper.begin(), mHelper.end(),orderImportance);
+      if (temp<mHelper.size()){
+        while (((mHelper[temp].e.call->id) != (work[mHelper[temp].e.id])) || (work[mHelper[temp].e.id]!=-1)){
+        temp++; 
         }
+        mHelper[temp].next_call=call_ids[i];
+        temp++; 
       }
+    } 
+  }
+
 
   //Step 5 - adding any unanswered calls from call ids to priority pool
 
-  priority_pool.insert(priority_pool.end(),call_ids.begin(), call_ids.end());
+ priority_pool.insert(priority_pool.end(),call_ids.begin(), call_ids.end());
  
 
 
@@ -188,26 +198,28 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
    //
    
  //std::sort(mCalls.begin(), mCalls.end(), holdpoolImp);
-    for (unsigned long i=mCalls.size()-1; i>=0; i--){
-      int find = find_call(mCalls[i]->id);
-      if (find!=-1)  { //if call_id is in holdpool
-        //std::sort(mHelper.begin(), mHelper.end(), orderImportance);
-        for (unsigned long j=0; j<mHelper.size(); j++) {
-          if ((mHelper[j].e.skill>=mCalls[i]->difficulty) && (mCalls[work[mHelper[j].e.id]]->importance<mCalls[i]->importance)){
-            if (work[mHelper[j].e.id] == 0) {
-              work[mHelper[j].e.id] = mCalls[i]->id;
-              break;
-            }
-            else if (mHelper[j].next_call==0)
-            {
-              mHelper[j].next_call = mCalls[i]->id;
-              break;
-            }
-            
+    if (mCalls.size()>0) {
+      for (unsigned long i=mCalls.size()-1; i>=0; i--){
+        int find = find_call(mCalls[i]->id);
+        if (find!=-1)  { //if call_id is in holdpool
+          //std::sort(mHelper.begin(), mHelper.end(), orderImportance);
+          for (unsigned long j=0; j<mHelper.size(); j++) {
+            if ((mHelper[j].e.skill>=mCalls[i]->difficulty) && (mCalls[work[mHelper[j].e.id]]->importance<mCalls[i]->importance)){
+              if (work[mHelper[j].e.id] == 0) {
+                work[mHelper[j].e.id] = mCalls[i]->id;
+                break;
+              }
+              else if (mHelper[j].next_call==0)
+              {
+                mHelper[j].next_call = mCalls[i]->id;
+                break;
+              }
+              
 
+            }
           }
-        }
 
+        }
       }
     }
   }

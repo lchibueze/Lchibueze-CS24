@@ -73,17 +73,21 @@ int main(int argc, char** argv) {
     std::string line;
     std::ifstream callfile(argv[2]);
     while(std::getline(callfile, line)) {
+      std::cout<<"The minute is " <<minute;
       std::vector<Call> calls = parse_calls(minute, line);
 
       // Get any incoming calls and decide what to do:
       std::vector<int> call_ids = validator.calls(minute, calls);
       std::vector<int> actions  = center->calls(minute, call_ids);
+      std::cout<<"The minute is "<<minute;
 
       // Learn the details about any newly-answered calls:
       std::vector<Call> learned = validator.validate(minute, actions);
       center->learn(minute, learned);
+      std::cout<<"The minute is "<<minute;
       minute += 1;
-      std::cout<<minute;
+      
+      
     }
 
     validator.summarize();

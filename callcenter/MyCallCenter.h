@@ -41,7 +41,7 @@ public:
 // function will return a list of employees who can answer to a call with  their skill level higher than or equal to a call difficulty
   static bool orderSkill (const Employee_Helper &a, const Employee_Helper &b);
 
-  //static bool orderImportance (const Employee_Helper &a, const Employee_Helper &b);
+  static bool orderImportance (const Employee_Helper &a, const Employee_Helper &b);
 
   static bool holdpoolImp (std::pair<int,Call*> &a, std::pair<int,Call*> &b);
 
