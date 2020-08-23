@@ -70,7 +70,7 @@ void MyCallCenter::update_call(){
 std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_idss) {
   std::vector<int> call_ids = call_idss;
   std::vector<int> accepted_learn_ids; 
-  if (minute<540) {
+  if (minute<540) { 
     //Step 1 - assigning next call to employee
     for (unsigned long i=0; i<mHelper.size(); i++){
       if((mHelper[i].e.call->work_performed)==(mHelper[i].e.call->work_required+1)){
@@ -221,8 +221,8 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
 
         }
       }
-    }
-  }
+    } 
+  } 
   return accepted_learn_ids;
   
 
