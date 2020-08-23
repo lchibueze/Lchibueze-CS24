@@ -33,3 +33,4 @@ _You can work on challenge labs in pairs if you choose to._
 
 - [Noodle Shop](noodleshop): Making noodles (and money).
 - [Call Center](callcenter): Get your priorities straight.
+- [Vaccinate](vaccinate): Solution distribution.
