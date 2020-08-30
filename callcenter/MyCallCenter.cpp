@@ -1,4 +1,4 @@
- #include "MyCallCenter.h"
+  #include "MyCallCenter.h"
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -183,28 +183,36 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
 
     if (count>=0) {
       for (unsigned long j = count; j>0; j--) {
+        if (j > 1000000){
+          break;
+        }
+        std::cout<<j<<std::endl;
         //std::sort(mHelper.begin(), mHelper.end(),orderSkill);
         //code for algorithm of going back and forth with skillsets of employee
         int start=mHelper.size()/2;
         for (unsigned long i=0; i<mHelper.size(); i++){
           if (i%2==0) {
-            if (work[mHelper[start+i].e.id]==0) {
+            if (count >= 0 && work[mHelper[start+i].e.id]==0) {
               work[mHelper[start+i].e.id] = call_ids[j];
               accepted_learn_ids.push_back(call_ids[j]);
               //int *x=&j;
               call_ids.erase(call_ids.begin()+j); 
               start = start + i;
               count--;
+              if(j != 0 )
+                j--;
             }
     
           }
           else {
-            if (work[mHelper[start-i].e.id]==0) {
+            if (count >= 0 && work[mHelper[start-i].e.id]==0) {
               work[mHelper[start-i].e.id] = call_ids[j];
               accepted_learn_ids.push_back(call_ids[j]);
               call_ids.erase(call_ids.begin()+j); 
               start = start -i;
               count--;
+              if(j != 0 )
+                j--;
             } 
           }
          
@@ -284,11 +292,13 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
               bool second = (one<two);
               if (first && second){
                 if (work[mHelper[j].e.id] == 0) {
-                  work[mHelper[j].e.id] = mCalls[holdpool[i]]->id;
+                  work[mHelper[j].e.id] = holdpool[i];
+                  holdpool.erase(holdpool.begin()+i);
                   break;
                 }
                 else if (mHelper[j].next_call==0) {
-                  mHelper[j].next_call = mCalls[holdpool[i]]->id;
+                  mHelper[j].next_call = holdpool[i];
+                  holdpool.erase(holdpool.begin()+i);
                   break;
                 }
                   
@@ -296,6 +306,7 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
             }
             else if (first){
               work[mHelper[i].e.id] = holdpool[i];
+              holdpool.erase(holdpool.begin()+i);
               break;
             }
             }
@@ -321,11 +332,13 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
               bool second = (one<two);
               if (first && second){
                 if (work[mHelper[j].e.id] == 0) {
-                  work[mHelper[j].e.id] = mCalls[holdpool[i]]->id;
+                  work[mHelper[j].e.id] = holdpool[i];
+                  holdpool.erase(holdpool.begin()+i);
                   break;
                 }
                 else if (mHelper[j].next_call==0) {
-                  mHelper[j].next_call = mCalls[holdpool[i]]->id;
+                  mHelper[j].next_call = holdpool[i];
+                  holdpool.erase(holdpool.begin()+i);
                   break;
                 }
                   
@@ -333,6 +346,7 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
             }
             else if (first){
               work[mHelper[i].e.id] = holdpool[i];
+              holdpool.erase(holdpool.begin()+i);
               break;
             }
             }
