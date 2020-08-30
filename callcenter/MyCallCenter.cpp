@@ -305,7 +305,7 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
 
         if(i == 0){
           if(i > originalSize){
-          break;
+          
         }
 
         int find = find_call(holdpool[i]);
