@@ -10,7 +10,7 @@ class MyCallCenter: public CallCenter {
   std::vector<int> priority_pool;
   std::map<int,Call*> mCalls;
   std::map<int,int> work; 
-  
+  bool printDebug;
 
   struct Employee_Helper {
     Employee e;
@@ -46,7 +46,6 @@ public:
   static bool holdpoolImp (std::pair<int,Call*> &a, std::pair<int,Call*> &b);
 
   int find_call(int call_id); 
-
   int find_priority_call(int call_id);
 
   //int get_mCallsImp(int call_id);
@@ -54,7 +53,7 @@ public:
   Call* getDefaultCall();
 
   void update_call();
-
+  bool findMcalls(int call);
 
 
   //std::vector<Employee> find_helpful_employee(int call_difficulty);
