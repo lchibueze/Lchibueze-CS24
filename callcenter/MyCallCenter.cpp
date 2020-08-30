@@ -162,13 +162,13 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
     //Step 3 - finding employees with non important calls for priority pool calls
     unsigned long temp=0;
     if (count>0){
-      for(unsigned long i=count;i>=0;i--){
+      for(unsigned long i=count+1;i>0;i--){
         // std::sort(mHelper.begin(), mHelper.end(),orderImportance);
         while (temp<mHelper.size() && (((mHelper[temp].e.call->id) != (work[mHelper[temp].e.id])) || (work[mHelper[temp].e.id]!=-1))){
           temp++; 
           }
         if (temp<mHelper.size()){
-          mHelper[temp].next_call=priority_pool[i];
+          mHelper[temp].next_call=priority_pool[i+1];
           temp++; 
         }
         
@@ -265,8 +265,46 @@ std::vector<int> MyCallCenter::calls(int minute, const std::vector<int>& call_id
 
     if (holdpool.size()>0) {
       auto originalSize = holdpool.size();
-      for (unsigned long i=holdpool.size()-1; i>=0; i--){
+      unsigned long i;
+      for (i=holdpool.size()-1; i>0; i--){
         if(i > originalSize){
+          break;
+        }
+
+        int find = find_call(holdpool[i]);
+        if (find!=-1)  { //if call_id is in holdpool
+          //std::sort(mHelper.begin(), mHelper.end(), orderImportance);
+          for (unsigned long j=0; j<mHelper.size(); j++) {
+            bool first = (mHelper[j].e.skill>=mCalls[holdpool[i]]->difficulty) ;
+            auto temppp = work[mHelper[j].e.id];
+            auto find = findMcalls(temppp);
+            if(temppp != 0 && find){
+              auto one = mCalls[temppp]->importance; //segfault here
+              auto two = mCalls[holdpool[i]]->importance;
+              bool second = (one<two);
+              if (first && second){
+                if (work[mHelper[j].e.id] == 0) {
+                  work[mHelper[j].e.id] = mCalls[holdpool[i]]->id;
+                  break;
+                }
+                else if (mHelper[j].next_call==0) {
+                  mHelper[j].next_call = mCalls[holdpool[i]]->id;
+                  break;
+                }
+                  
+                }
+            }
+            else if (first){
+              work[mHelper[i].e.id] = holdpool[i];
+              break;
+            }
+            }
+
+          }
+        }
+
+        if(i == 0){
+          if(i > originalSize){
           break;
         }
 
